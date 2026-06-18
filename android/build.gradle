@@ -1,0 +1,28 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.arena.mobile3d'
+    compileSdk 35
+
+    sourceSets { main { assets.srcDirs = ['assets'] } }
+
+    defaultConfig {
+        applicationId 'com.arena.mobile3d'
+        minSdk 23
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0'
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+}

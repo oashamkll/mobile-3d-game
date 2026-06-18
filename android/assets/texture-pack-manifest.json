@@ -1,0 +1,25 @@
+{
+  "name": "Mobile 3D Adventure Generated Texture Pack",
+  "version": "0.1.0",
+  "generated": true,
+  "sets": {
+    "character": [
+      "textures/character/hero_cloth_albedo.png",
+      "textures/character/hero_cloth_normal.png",
+      "textures/character/hero_hair_albedo.png",
+      "textures/character/hero_leather_albedo.png",
+      "textures/character/hero_leather_normal.png",
+      "textures/character/hero_skin_albedo.png"
+    ],
+    "environment": [
+      "textures/environment/grass_albedo.png",
+      "textures/environment/grass_normal.png",
+      "textures/environment/stone_albedo.png",
+      "textures/environment/stone_normal.png",
+      "textures/environment/wood_albedo.png",
+      "textures/environment/wood_normal.png",
+      "textures/environment/sky_gradient.png"
+    ]
+  },
+  "notes": "Albedo maps are used by the current LibGDX prototype. Normal maps are included for future custom shader/PBR upgrades."
+}
