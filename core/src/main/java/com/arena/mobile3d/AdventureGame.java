@@ -225,7 +225,7 @@ public class AdventureGame extends ApplicationAdapter {
             heroYaw = MathUtils.atan2(move.x, move.z) * MathUtils.radiansToDegrees;
             walkTime += dt * 9.5f;
         } else {
-            velocity.scl(MathUtils.pow(0.05f, dt));
+            velocity.scl((float)Math.pow(0.05f, dt));
             walkTime += dt * 2.0f;
         }
         heroPos.mulAdd(velocity, dt);
