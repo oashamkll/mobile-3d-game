@@ -1,6 +1,6 @@
 {
-  "name": "Mobile 3D Adventure Generated Texture Pack",
-  "version": "0.1.0",
+  "name": "Mobile 3D Adventure Premium Generated Texture and Audio Pack",
+  "version": "0.1.3",
   "generated": true,
   "sets": {
     "character": [
@@ -9,7 +9,9 @@
       "textures/character/hero_hair_albedo.png",
       "textures/character/hero_leather_albedo.png",
       "textures/character/hero_leather_normal.png",
-      "textures/character/hero_skin_albedo.png"
+      "textures/character/hero_skin_albedo.png",
+      "textures/character/hero_metal_albedo.png",
+      "textures/character/hero_metal_normal.png"
     ],
     "environment": [
       "textures/environment/grass_albedo.png",
@@ -18,8 +20,15 @@
       "textures/environment/stone_normal.png",
       "textures/environment/wood_albedo.png",
       "textures/environment/wood_normal.png",
+      "textures/environment/leaves_albedo.png",
+      "textures/environment/leaves_normal.png",
       "textures/environment/sky_gradient.png"
+    ],
+    "audio": [
+      "audio/footstep.wav",
+      "audio/chime.wav",
+      "audio/wind_loop.wav"
     ]
   },
-  "notes": "Albedo maps are used by the current LibGDX prototype. Normal maps are included for future custom shader/PBR upgrades."
+  "notes": "Premium procedural albedo/normal texture pack plus generated WAV sound effects. The game currently uses optimized albedo materials for mobile FPS; normal maps are included for future shader upgrades."
 }
