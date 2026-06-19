@@ -11,6 +11,14 @@ class AndroidLauncher : AndroidApplication() {
             useAccelerometer = false
             useCompass = false
             useImmersiveMode = true
+            useWakelock = true
+            r = 8
+            g = 8
+            b = 8
+            a = 8
+            depth = 16
+            stencil = 0
+            numSamples = 0
         }
         initialize(AdventureGame(), config)
     }

@@ -20,8 +20,30 @@ android {
         applicationId 'com.arena.mobile3d'
         minSdk 23
         targetSdk 35
-        versionCode 1
-        versionName '0.1.0'
+        versionCode 2
+        versionName '0.1.1'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('RELEASE_STORE_FILE') ?: 'keystore/mobile3d-release.p12')
+            storeType 'pkcs12'
+            storePassword System.getenv('RELEASE_STORE_PASSWORD') ?: 'mobile3d2026'
+            keyAlias System.getenv('RELEASE_KEY_ALIAS') ?: 'mobile3d'
+            keyPassword System.getenv('RELEASE_KEY_PASSWORD') ?: 'mobile3d2026'
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+        }
     }
 }
 

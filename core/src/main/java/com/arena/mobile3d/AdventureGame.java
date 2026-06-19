@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -95,10 +96,36 @@ public class AdventureGame extends ApplicationAdapter {
     }
 
     private Texture tex(String path) {
-        Texture t = new Texture(Gdx.files.internal(path), true);
-        t.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
-        t.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        return t;
+        try {
+            Texture t = new Texture(Gdx.files.internal(path), false);
+            t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            t.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+            return t;
+        } catch (Throwable error) {
+            Gdx.app.error("AdventureGame", "Texture load failed: " + path, error);
+            return fallbackTexture(path);
+        }
+    }
+
+    private Texture fallbackTexture(String name) {
+        Pixmap pixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
+        Color base = name.contains("grass") ? new Color(0.22f, 0.55f, 0.20f, 1f)
+                : name.contains("stone") ? new Color(0.45f, 0.45f, 0.43f, 1f)
+                : name.contains("wood") || name.contains("leather") ? new Color(0.43f, 0.25f, 0.13f, 1f)
+                : name.contains("skin") ? new Color(0.78f, 0.52f, 0.36f, 1f)
+                : name.contains("hair") ? new Color(0.16f, 0.10f, 0.06f, 1f)
+                : new Color(0.15f, 0.32f, 0.65f, 1f);
+        pixmap.setColor(base);
+        pixmap.fill();
+        pixmap.setColor(base.cpy().mul(1.25f));
+        for (int y = 0; y < 64; y += 16) {
+            for (int x = 0; x < 64; x += 16) {
+                if (((x + y) / 16) % 2 == 0) pixmap.fillRectangle(x, y, 16, 16);
+            }
+        }
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
     }
 
     private Material mat(Texture texture) {
@@ -291,7 +318,13 @@ public class AdventureGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         modelBatch.dispose(); shapes.dispose(); sprites.dispose(); font.dispose();
-        grass.dispose(); stone.dispose(); wood.dispose(); cloth.dispose(); skin.dispose(); leather.dispose(); hair.dispose();
+        if (grass != null) grass.dispose();
+        if (stone != null) stone.dispose();
+        if (wood != null) wood.dispose();
+        if (cloth != null) cloth.dispose();
+        if (skin != null) skin.dispose();
+        if (leather != null) leather.dispose();
+        if (hair != null) hair.dispose();
         for (Model model : models) model.dispose();
     }
 

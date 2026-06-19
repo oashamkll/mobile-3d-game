@@ -10,8 +10,8 @@ permissions:
   actions: read
 
 jobs:
-  build-debug-apk:
-    name: Build debug APK
+  build-apk:
+    name: Build signed Android APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -30,12 +30,23 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Build debug APK
-        run: gradle --no-daemon :android:assembleDebug
+      - name: Build debug and signed release APK
+        env:
+          RELEASE_STORE_PASSWORD: mobile3d2026
+          RELEASE_KEY_ALIAS: mobile3d
+          RELEASE_KEY_PASSWORD: mobile3d2026
+        run: gradle --no-daemon :android:assembleDebug :android:assembleRelease
 
       - name: Upload debug APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: mobile-3d-game-debug-apk
           path: android/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload signed release APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-3d-game-signed-release-apk
+          path: android/build/outputs/apk/release/*.apk
           if-no-files-found: error
