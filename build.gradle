@@ -6,6 +6,6 @@ plugins {
 allprojects {
     ext {
         appName = 'Mobile 3D Game'
-        gdxVersion = '1.12.1'
+        gdxVersion = '1.14.0'
     }
 }
