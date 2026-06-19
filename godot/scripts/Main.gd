@@ -270,7 +270,7 @@ func _physics_process(delta: float) -> void:
 	var forward := Vector3(sin(camera_yaw),0,cos(camera_yaw)).normalized()
 	var right := Vector3(forward.z,0,-forward.x).normalized()
 	var world_move := (right * input_move.x + forward * input_move.y)
-	var speed := min(input_move.length(), 1.0)
+	var speed: float = min(input_move.length(), 1.0)
 	if world_move.length_squared() > 0.001:
 		world_move = world_move.normalized()
 		velocity = world_move * HERO_SPEED
@@ -290,7 +290,7 @@ func _physics_process(delta: float) -> void:
 
 func _animate_hero(speed: float) -> void:
 	var swing := sin(walk_time) * 0.55 * speed
-	var bob := abs(sin(walk_time)) * 0.07 * speed
+	var bob: float = abs(sin(walk_time)) * 0.07 * speed
 	hero_root.position.y = 0.2 + bob
 	for key in hero_parts.keys():
 		var p: Dictionary = hero_parts[key]
@@ -313,6 +313,16 @@ func _update_camera(delta: float) -> void:
 	var desired := hero_pos + Vector3(-sin(camera_yaw)*flat, sin(camera_pitch)*dist + 2.8, -cos(camera_yaw)*flat)
 	camera.position = camera.position.lerp(desired, 1.0 - pow(0.005, delta))
 	camera.look_at(hero_pos + Vector3(0,1.65,0), Vector3.UP)
+
+func _relayout_hud() -> void:
+	var size := get_viewport().get_visible_rect().size
+	hud_scale = clamp(min(size.x, size.y) / 720.0, 0.85, 1.35)
+	fixed_stick_center = Vector2(190.0 * hud_scale, size.y - 185.0 * hud_scale)
+	stick_knob = fixed_stick_center
+	if hud:
+		hud.stick_center = fixed_stick_center
+		hud.stick_knob = stick_knob
+		hud.hud_scale = hud_scale
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
