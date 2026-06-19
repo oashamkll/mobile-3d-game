@@ -72,3 +72,13 @@ android/assets/levels/        Reserved for level data
 - Add collision/navigation
 - Use generated normal maps in a custom shader
 - Add level progression, collectibles and enemies
+
+## Godot 4 complex-engine version
+
+A new Godot 4 implementation lives in:
+
+```text
+godot/
+```
+
+This is now the serious-engine direction for the project: realistic darker graphics, infinite procedural chunk world, improved joystick, mobile renderer, audio, and animated procedural humanoid. See [GODOT_ENGINE.md](GODOT_ENGINE.md).

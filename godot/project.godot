@@ -1,0 +1,37 @@
+; Engine configuration file.
+; Godot 4 complex-engine version of Mobile 3D Game.
+
+config_version=5
+
+[application]
+config/name="Wildland 3D Adventure"
+config/description="A realistic mobile third-person 3D adventure prototype with infinite procedural world."
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.3", "Mobile")
+config/icon="res://assets/icons/icon.png"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/handheld/orientation=1
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
+[rendering]
+renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="mobile"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.29, 0.32, 0.33, 1)
+anti_aliasing/quality/msaa_3d=1
+anti_aliasing/quality/screen_space_aa=1
+scaling_3d/mode=1
+scaling_3d/scale=0.82
+
+[input]
+move_forward={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":87)]}
+move_back={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":83)]}
+move_left={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":65)]}
+move_right={"deadzone":0.5,"events":[Object(InputEventKey,"physical_keycode":68)]}
+
+[physics]
+3d/default_gravity=9.8

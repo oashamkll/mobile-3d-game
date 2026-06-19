@@ -1,0 +1,25 @@
+name: Godot Project Check
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  godot-check:
+    name: Validate Godot project
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Import and validate Godot project
+        working-directory: godot
+        run: |
+          godot --headless --editor --quit --import
+          godot --headless --check-only --script res://scripts/Main.gd
