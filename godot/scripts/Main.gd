@@ -4,8 +4,8 @@ extends Node3D
 # Realistic, darker art direction; infinite chunk world; mobile HUD joystick;
 # pooled instances for FPS; procedural high-detail humanoid with animation.
 
-const CHUNK_SIZE := 42.0
-const CHUNK_RADIUS := 1
+const CHUNK_SIZE := 56.0
+const CHUNK_RADIUS := 2
 const HERO_SPEED := 7.0
 const JOYSTICK_RADIUS := 128.0
 
@@ -17,6 +17,8 @@ var hero_root: Node3D
 var hero_parts: Dictionary = {}
 var chunks: Array[Dictionary] = []
 var chunk_center := Vector2i(999999, 999999)
+var pending_chunk_coords: Array[Vector2i] = []
+var pending_chunk_index := 0
 
 var hero_pos := Vector3.ZERO
 var velocity := Vector3.ZERO
@@ -86,27 +88,27 @@ func _build_lighting() -> void:
 	world_env = WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
-	env.background_color = Color(0.20, 0.22, 0.23)
+	env.background_color = Color(0.46, 0.54, 0.58)
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.30, 0.32, 0.32)
-	env.ambient_light_energy = 0.54
-	env.fog_enabled = true
+	env.ambient_light_color = Color(0.55, 0.57, 0.55)
+	env.ambient_light_energy = 0.78
+	env.fog_enabled = false
 	env.fog_light_color = Color(0.42, 0.45, 0.43)
-	env.fog_density = 0.026
+	env.fog_density = 0.0
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	env.adjustment_enabled = true
-	env.adjustment_brightness = 0.82
-	env.adjustment_contrast = 1.28
-	env.adjustment_saturation = 0.58
+	env.adjustment_brightness = 1.02
+	env.adjustment_contrast = 1.08
+	env.adjustment_saturation = 0.82
 	world_env.environment = env
 	add_child(world_env)
 
 	sun = DirectionalLight3D.new()
 	sun.name = "Low Warm Sun"
-	sun.light_energy = 1.75
+	sun.light_energy = 2.25
 	sun.light_color = Color(0.95, 0.84, 0.68)
 	sun.rotation_degrees = Vector3(-52, -38, 0)
-	sun.shadow_enabled = false
+	sun.shadow_enabled = true
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	add_child(sun)
 
@@ -114,7 +116,7 @@ func _build_camera() -> void:
 	camera = Camera3D.new()
 	camera.fov = 64
 	camera.near = 0.08
-	camera.far = 92
+	camera.far = 190
 	add_child(camera)
 
 func _build_audio() -> void:
@@ -182,15 +184,15 @@ func _create_chunk() -> Dictionary:
 	var chunk := {"root":root, "ground":null, "path":null, "trees":[], "rocks":[], "grass":[]}
 	chunk["ground"] = _box(Vector3(CHUNK_SIZE+0.2,0.08,CHUNK_SIZE+0.2), mat_ground); root.add_child(chunk["ground"])
 	chunk["path"] = _box(Vector3(5.0,0.07,3.0), mat_stone); root.add_child(chunk["path"])
-	for i in range(1):
+	for i in range(2):
 		var tr := Node3D.new(); root.add_child(tr)
 		var trunk := _cylinder(0.28, 3.6, mat_bark, 10); trunk.position.y = 1.8; tr.add_child(trunk)
 		var crown := _sphere(Vector3(2.0,1.6,2.0), mat_leaves, 10, 6); crown.position.y = 4.0; tr.add_child(crown)
 		var crown2 := _sphere(Vector3(1.35,1.05,1.35), mat_leaves, 8, 5); crown2.position = Vector3(0.45,4.75,-0.25); tr.add_child(crown2)
 		chunk["trees"].append(tr)
-	for i in range(2):
-		var r := _sphere(Vector3(1.0,0.50,0.85), mat_stone, 8, 5); root.add_child(r); chunk["rocks"].append(r)
 	for i in range(3):
+		var r := _sphere(Vector3(1.0,0.50,0.85), mat_stone, 8, 5); root.add_child(r); chunk["rocks"].append(r)
+	for i in range(5):
 		var g := _cylinder(0.055, 0.65, mat_ground, 5); root.add_child(g); chunk["grass"].append(g)
 	return chunk
 
@@ -199,10 +201,22 @@ func _refresh_chunks(force: bool=false) -> void:
 	var cz := floori(hero_pos.z / CHUNK_SIZE)
 	if not force and chunk_center == Vector2i(cx, cz): return
 	chunk_center = Vector2i(cx, cz)
-	var idx := 0
+	pending_chunk_coords.clear()
 	for dz in range(-CHUNK_RADIUS, CHUNK_RADIUS+1):
 		for dx in range(-CHUNK_RADIUS, CHUNK_RADIUS+1):
-			_position_chunk(chunks[idx], cx+dx, cz+dz); idx += 1
+			pending_chunk_coords.append(Vector2i(cx + dx, cz + dz))
+	pending_chunk_coords.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		return Vector2(a.x - cx, a.y - cz).length_squared() < Vector2(b.x - cx, b.y - cz).length_squared()
+	)
+	pending_chunk_index = 0
+	_process_chunk_queue(999 if force else 6)
+
+func _process_chunk_queue(budget: int) -> void:
+	while pending_chunk_index < pending_chunk_coords.size() and budget > 0:
+		var coord := pending_chunk_coords[pending_chunk_index]
+		_position_chunk(chunks[pending_chunk_index], coord.x, coord.y)
+		pending_chunk_index += 1
+		budget -= 1
 
 func _position_chunk(c: Dictionary, cx: int, cz: int) -> void:
 	var base := Vector3(cx * CHUNK_SIZE, 0, cz * CHUNK_SIZE)
@@ -265,6 +279,7 @@ func _update_joystick(pos: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	_refresh_chunks(false)
+	_process_chunk_queue(2)
 	var key_move := Vector2(Input.get_action_strength("move_right")-Input.get_action_strength("move_left"), Input.get_action_strength("move_forward")-Input.get_action_strength("move_back"))
 	var input_move := move_vec if move_vec.length() > key_move.length() else key_move
 	var forward := Vector3(sin(camera_yaw),0,cos(camera_yaw)).normalized()
@@ -308,7 +323,7 @@ func _animate_hero(speed: float) -> void:
 			n.position.y += sin(walk_time * 0.33) * 0.015
 
 func _update_camera(delta: float) -> void:
-	var dist := 9.2
+	var dist := 10.8
 	var flat := cos(camera_pitch) * dist
 	var desired := hero_pos + Vector3(-sin(camera_yaw)*flat, sin(camera_pitch)*dist + 2.8, -cos(camera_yaw)*flat)
 	camera.position = camera.position.lerp(desired, 1.0 - pow(0.005, delta))
