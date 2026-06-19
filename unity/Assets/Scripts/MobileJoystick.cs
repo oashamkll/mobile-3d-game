@@ -9,6 +9,7 @@ namespace Wildland3D
         public RectTransform knob;
         public float radius = 120f;
         public float deadZone = .08f;
+        public bool invertX = false;
         public Vector2 Value { get; private set; }
 
         private Vector2 center;
@@ -35,6 +36,7 @@ namespace Wildland3D
             delta = Vector2.ClampMagnitude(delta, radius);
             if (knob) knob.anchoredPosition = center + delta;
             Value = delta / radius;
+            if (invertX) Value = new Vector2(-Value.x, Value.y);
             if (Value.magnitude < deadZone) Value = Vector2.zero;
         }
     }

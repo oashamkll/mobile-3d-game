@@ -62,11 +62,11 @@ namespace Wildland3D
             var root = new GameObject($"Chunk_{index}").transform;
             root.SetParent(transform, false);
             var chunk = new Chunk { root = root };
-            chunk.ground = CreatePart(root, "Ground", cubeMesh, groundMaterial);
-            chunk.path = CreatePart(root, "Path", cubeMesh, rockMaterial);
+            chunk.ground = CreatePart(root, "Ground", cubeMesh, groundMaterial, true);
+            chunk.path = CreatePart(root, "Path", cubeMesh, rockMaterial, true);
             for (int i = 0; i < 2; i++) chunk.trees.Add(CreateTree(root, i));
             for (int i = 0; i < 4; i++) chunk.rocks.Add(CreatePart(root, $"Rock_{i}", sphereMesh, rockMaterial));
-            for (int i = 0; i < 8; i++) chunk.grass.Add(CreatePart(root, $"Grass_{i}", cylinderMesh, grassMaterial));
+            for (int i = 0; i < 8; i++) chunk.grass.Add(CreatePart(root, $"Grass_{i}", cylinderMesh, grassMaterial, false));
             return chunk;
         }
 
@@ -83,12 +83,18 @@ namespace Wildland3D
             };
         }
 
-        private MeshRenderer CreatePart(Transform parent, string name, Mesh mesh, Material mat)
+        private MeshRenderer CreatePart(Transform parent, string name, Mesh mesh, Material mat, bool collider = true)
         {
             var go = new GameObject(name);
             go.transform.SetParent(parent, false);
             var mf = go.AddComponent<MeshFilter>(); mf.sharedMesh = mesh;
             var mr = go.AddComponent<MeshRenderer>(); mr.sharedMaterial = mat;
+            if (collider)
+            {
+                var mc = go.AddComponent<MeshCollider>();
+                mc.sharedMesh = mesh;
+                mc.convex = false;
+            }
             return mr;
         }
 

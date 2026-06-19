@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 24
+  productGUID: 1234567890abcdef1234567890abcdef
+  AndroidProfiler: 0
+  AndroidFilterTouchesWhenObscured: 0
+  defaultScreenOrientation: 3
+  targetDevice: 2
+  useOnDemandResources: 0
+  accelerometerFrequency: 60
+  companyName: Arena
+  productName: Wildland 3D
+  bundleVersion: 0.3.0
+  AndroidBundleVersionCode: 1
+  applicationIdentifier:
+    Android: com.arena.wildland3d.unity

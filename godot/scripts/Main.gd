@@ -274,7 +274,7 @@ func _update_joystick(pos: Vector2) -> void:
 	var d := pos - fixed_stick_center
 	if d.length() > JOYSTICK_RADIUS * hud_scale: d = d.normalized() * JOYSTICK_RADIUS * hud_scale
 	stick_knob = fixed_stick_center + d
-	move_vec = Vector2(d.x, -d.y) / (JOYSTICK_RADIUS * hud_scale)
+	move_vec = Vector2(-d.x, -d.y) / (JOYSTICK_RADIUS * hud_scale)
 	if move_vec.length() < 0.08: move_vec = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
