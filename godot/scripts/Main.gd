@@ -4,8 +4,8 @@ extends Node3D
 # Realistic, darker art direction; infinite chunk world; mobile HUD joystick;
 # pooled instances for FPS; procedural high-detail humanoid with animation.
 
-const CHUNK_SIZE := 34.0
-const CHUNK_RADIUS := 2
+const CHUNK_SIZE := 42.0
+const CHUNK_RADIUS := 1
 const HERO_SPEED := 7.0
 const JOYSTICK_RADIUS := 128.0
 
@@ -49,8 +49,8 @@ var chime: AudioStreamPlayer
 var hud: Control
 
 func _ready() -> void:
-	Engine.max_fps = 60
-	RenderingServer.viewport_set_msaa_3d(get_viewport().get_viewport_rid(), RenderingServer.VIEWPORT_MSAA_2X)
+	Engine.max_fps = 90
+	RenderingServer.viewport_set_msaa_3d(get_viewport().get_viewport_rid(), RenderingServer.VIEWPORT_MSAA_DISABLED)
 	_build_materials()
 	_build_lighting()
 	_build_camera()
@@ -62,11 +62,11 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if OS.has_feature("editor") == false else Input.MOUSE_MODE_VISIBLE)
 
 func _build_materials() -> void:
-	mat_ground = _pbr("res://assets/textures/environment/grass_albedo.png", Color(0.42,0.45,0.37), 0.93, 0.0)
-	mat_stone = _pbr("res://assets/textures/environment/stone_albedo.png", Color(0.55,0.54,0.50), 0.86, 0.0)
-	mat_bark = _pbr("res://assets/textures/environment/wood_albedo.png", Color(0.42,0.30,0.22), 0.82, 0.0)
-	mat_leaves = _pbr("res://assets/textures/environment/leaves_albedo.png", Color(0.28,0.36,0.23), 0.88, 0.0)
-	mat_cloth = _pbr("res://assets/textures/character/hero_cloth_albedo.png", Color(0.22,0.29,0.38), 0.72, 0.0)
+	mat_ground = _pbr("res://assets/textures/environment/grass_albedo.png", Color(0.27,0.30,0.24), 0.96, 0.0)
+	mat_stone = _pbr("res://assets/textures/environment/stone_albedo.png", Color(0.42,0.41,0.38), 0.90, 0.0)
+	mat_bark = _pbr("res://assets/textures/environment/wood_albedo.png", Color(0.30,0.22,0.17), 0.88, 0.0)
+	mat_leaves = _pbr("res://assets/textures/environment/leaves_albedo.png", Color(0.20,0.25,0.18), 0.92, 0.0)
+	mat_cloth = _pbr("res://assets/textures/character/hero_cloth_albedo.png", Color(0.12,0.16,0.20), 0.78, 0.0)
 	mat_skin = _pbr("res://assets/textures/character/hero_skin_albedo.png", Color(0.62,0.45,0.34), 0.61, 0.0)
 	mat_leather = _pbr("res://assets/textures/character/hero_leather_albedo.png", Color(0.30,0.21,0.16), 0.68, 0.05)
 	mat_hair = _pbr("res://assets/textures/character/hero_hair_albedo.png", Color(0.12,0.09,0.07), 0.76, 0.0)
@@ -86,27 +86,27 @@ func _build_lighting() -> void:
 	world_env = WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
-	env.background_color = Color(0.28, 0.31, 0.32)
+	env.background_color = Color(0.20, 0.22, 0.23)
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.36, 0.39, 0.40)
-	env.ambient_light_energy = 0.62
+	env.ambient_light_color = Color(0.30, 0.32, 0.32)
+	env.ambient_light_energy = 0.54
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.42, 0.45, 0.43)
-	env.fog_density = 0.018
+	env.fog_density = 0.026
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	env.adjustment_enabled = true
-	env.adjustment_brightness = 0.92
-	env.adjustment_contrast = 1.15
-	env.adjustment_saturation = 0.72
+	env.adjustment_brightness = 0.82
+	env.adjustment_contrast = 1.28
+	env.adjustment_saturation = 0.58
 	world_env.environment = env
 	add_child(world_env)
 
 	sun = DirectionalLight3D.new()
 	sun.name = "Low Warm Sun"
-	sun.light_energy = 2.2
+	sun.light_energy = 1.75
 	sun.light_color = Color(0.95, 0.84, 0.68)
 	sun.rotation_degrees = Vector3(-52, -38, 0)
-	sun.shadow_enabled = true
+	sun.shadow_enabled = false
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	add_child(sun)
 
@@ -114,7 +114,7 @@ func _build_camera() -> void:
 	camera = Camera3D.new()
 	camera.fov = 64
 	camera.near = 0.08
-	camera.far = 125
+	camera.far = 92
 	add_child(camera)
 
 func _build_audio() -> void:
@@ -182,15 +182,15 @@ func _create_chunk() -> Dictionary:
 	var chunk := {"root":root, "ground":null, "path":null, "trees":[], "rocks":[], "grass":[]}
 	chunk["ground"] = _box(Vector3(CHUNK_SIZE+0.2,0.08,CHUNK_SIZE+0.2), mat_ground); root.add_child(chunk["ground"])
 	chunk["path"] = _box(Vector3(5.0,0.07,3.0), mat_stone); root.add_child(chunk["path"])
-	for i in range(2):
+	for i in range(1):
 		var tr := Node3D.new(); root.add_child(tr)
 		var trunk := _cylinder(0.28, 3.6, mat_bark, 10); trunk.position.y = 1.8; tr.add_child(trunk)
 		var crown := _sphere(Vector3(2.0,1.6,2.0), mat_leaves, 10, 6); crown.position.y = 4.0; tr.add_child(crown)
 		var crown2 := _sphere(Vector3(1.35,1.05,1.35), mat_leaves, 8, 5); crown2.position = Vector3(0.45,4.75,-0.25); tr.add_child(crown2)
 		chunk["trees"].append(tr)
-	for i in range(3):
+	for i in range(2):
 		var r := _sphere(Vector3(1.0,0.50,0.85), mat_stone, 8, 5); root.add_child(r); chunk["rocks"].append(r)
-	for i in range(5):
+	for i in range(3):
 		var g := _cylinder(0.055, 0.65, mat_ground, 5); root.add_child(g); chunk["grass"].append(g)
 	return chunk
 
@@ -308,7 +308,7 @@ func _animate_hero(speed: float) -> void:
 			n.position.y += sin(walk_time * 0.33) * 0.015
 
 func _update_camera(delta: float) -> void:
-	var dist := 8.7
+	var dist := 9.2
 	var flat := cos(camera_pitch) * dist
 	var desired := hero_pos + Vector3(-sin(camera_yaw)*flat, sin(camera_pitch)*dist + 2.8, -cos(camera_yaw)*flat)
 	camera.position = camera.position.lerp(desired, 1.0 - pow(0.005, delta))
@@ -317,7 +317,7 @@ func _update_camera(delta: float) -> void:
 func _relayout_hud() -> void:
 	var size := get_viewport().get_visible_rect().size
 	hud_scale = clamp(min(size.x, size.y) / 720.0, 0.85, 1.35)
-	fixed_stick_center = Vector2(190.0 * hud_scale, size.y - 185.0 * hud_scale)
+	fixed_stick_center = Vector2(215.0 * hud_scale, size.y - 205.0 * hud_scale)
 	stick_knob = fixed_stick_center
 	if hud:
 		hud.stick_center = fixed_stick_center
