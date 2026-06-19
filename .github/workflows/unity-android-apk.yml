@@ -1,0 +1,58 @@
+name: Build Unity Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'unity/**'
+      - '.github/workflows/unity-android-apk.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build-unity-apk:
+    name: Build Unity APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Unity license secret
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.UNITY_LICENSE }}" ]; then
+            echo "UNITY_LICENSE secret is required to build Unity projects on GitHub Actions."
+            echo "Add it in: Repository Settings -> Secrets and variables -> Actions -> New repository secret."
+            exit 1
+          fi
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: unity/Library
+          key: Library-Wildland3D-Android-${{ hashFiles('unity/Assets/**', 'unity/Packages/**', 'unity/ProjectSettings/**') }}
+          restore-keys: |
+            Library-Wildland3D-Android-
+
+      - name: Build Unity Android APK
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: unity
+          unityVersion: 2022.3.55f1
+          targetPlatform: Android
+          androidExportType: androidPackage
+          customParameters: -executeMethod Wildland3D.Editor.AndroidBuild.PerformBuild
+
+      - name: Upload Unity APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wildland-3d-unity-apk
+          path: unity/Builds/Android/*.apk
+          if-no-files-found: error

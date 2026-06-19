@@ -82,3 +82,15 @@ godot/
 ```
 
 This is now the serious-engine direction for the project: realistic darker graphics, infinite procedural chunk world, improved joystick, mobile renderer, audio, and animated procedural humanoid. See [GODOT_ENGINE.md](GODOT_ENGINE.md).
+
+## Unity primary version
+
+The game is now being developed primarily in Unity. See [UNITY_ENGINE.md](UNITY_ENGINE.md).
+
+Unity source is in:
+
+```text
+unity/
+```
+
+Unity GitHub Actions build requires the `UNITY_LICENSE` repository secret.
