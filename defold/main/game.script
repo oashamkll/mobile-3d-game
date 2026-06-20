@@ -17,11 +17,8 @@ local look_id = nil
 local last_look_x = 0
 
 local function rand(cx, cz, salt)
-    local x = (cx * 73428767 ~ cz * 912931 ~ salt * 19349663) & 0x7fffffff
-    x = (x ~ (x >> 13)) & 0x7fffffff
-    x = (x * 1274126177) & 0x7fffffff
-    x = (x ~ (x >> 16)) & 0x7fffffff
-    return x / 0x7fffffff
+    local v = math.sin(cx * 12.9898 + cz * 78.233 + salt * 37.719) * 43758.5453
+    return v - math.floor(v)
 end
 local function signed(cx, cz, salt) return rand(cx, cz, salt) * 2 - 1 end
 
