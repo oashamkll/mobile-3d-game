@@ -1,0 +1,32 @@
+title = Wildland 3D Defold
+
+[bootstrap]
+main_collection = /main/main.collection
+render = /builtins/render/default.render
+
+[display]
+width = 1280
+height = 720
+high_dpi = 1
+fullscreen = 0
+update_frequency = 60
+variable_dt = 1
+
+[android]
+package = com.arena.wildland3d.defold
+version_code = 1
+minimum_sdk_version = 23
+target_sdk_version = 35
+screen_orientation = landscape
+immersive_mode = 1
+
+[input]
+bindings = /main/game.input_binding
+
+[graphics]
+default_texture_min_filter = linear_mipmap_nearest
+default_texture_mag_filter = linear
+max_debug_vertices = 10000
+
+[project]
+dependencies = 

@@ -1,0 +1,21 @@
+local base
+local knob
+local fps_node
+
+function init(self)
+    base = gui.get_node("joy_base")
+    knob = gui.get_node("joy_knob")
+    fps_node = gui.get_node("fps")
+end
+
+function update(self, dt)
+    gui.set_text(fps_node, "FPS " .. tostring(math.floor(1 / math.max(dt, 0.001))))
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("joystick") then
+        gui.set_position(knob, vmath.vector3(120 + message.x * 72, 120 + message.y * 72, 0.1))
+    elseif message_id == hash("joystick_reset") then
+        gui.set_position(knob, vmath.vector3(120, 120, 0.1))
+    end
+end

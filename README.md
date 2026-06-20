@@ -94,3 +94,13 @@ unity/
 ```
 
 Unity GitHub Actions build requires the `UNITY_LICENSE` repository secret.
+
+## Defold mobile-optimized engine version
+
+A Defold version was added under:
+
+```text
+defold/
+```
+
+Defold is lightweight and optimized for mobile APK builds without Unity license requirements. See [DEFOLD_ENGINE.md](DEFOLD_ENGINE.md).

@@ -1,0 +1,49 @@
+script: "/main/ui.gui_script"
+fonts {
+  name: "system_font"
+  font: "/builtins/fonts/default.font"
+}
+nodes {
+  position { x: 120.0 y: 120.0 z: 0.0 }
+  scale { x: 1.0 y: 1.0 z: 1.0 }
+  size { x: 170.0 y: 170.0 z: 0.0 }
+  color { x: 0.08 y: 0.09 z: 0.08 w: 0.55 }
+  type: TYPE_PIE
+  id: "joy_base"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+}
+nodes {
+  position { x: 120.0 y: 120.0 z: 0.1 }
+  scale { x: 1.0 y: 1.0 z: 1.0 }
+  size { x: 74.0 y: 74.0 z: 0.0 }
+  color { x: 0.42 y: 0.44 z: 0.39 w: 0.90 }
+  type: TYPE_PIE
+  id: "joy_knob"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+}
+nodes {
+  position { x: 20.0 y: 690.0 z: 0.0 }
+  scale { x: 1.2 y: 1.2 z: 1.0 }
+  size { x: 600.0 y: 40.0 z: 0.0 }
+  color { x: 0.85 y: 0.86 z: 0.78 w: 1.0 }
+  type: TYPE_TEXT
+  text: "WILDLAND 3D - DEFOLD MOBILE ENGINE"
+  font: "system_font"
+  id: "title"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+}
+nodes {
+  position { x: 1060.0 y: 690.0 z: 0.0 }
+  scale { x: 1.0 y: 1.0 z: 1.0 }
+  size { x: 200.0 y: 40.0 z: 0.0 }
+  color { x: 0.85 y: 0.86 z: 0.78 w: 1.0 }
+  type: TYPE_TEXT
+  text: "FPS"
+  font: "system_font"
+  id: "fps"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+}
