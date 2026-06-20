@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
       - name: Download Defold Bob
         run: |
           curl -L -o bob.jar https://github.com/defold/defold/releases/download/1.9.8/bob.jar
