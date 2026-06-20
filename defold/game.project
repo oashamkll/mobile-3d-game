@@ -3,8 +3,8 @@ title = Wildland 3D Defold
 version = 0.1.0
 
 [bootstrap]
-main_collection = /main/main.collection
-render = /builtins/render/default.render
+main_collection = /main/main.collectionc
+render = /builtins/render/default.renderc
 
 [display]
 width = 1280
