@@ -73,6 +73,7 @@ function update(self, dt)
         walk_t = walk_t + dt
     end
     refresh_chunks()
+    msg.post("#ui", "render_state", { x = hero.x, z = hero.z, yaw = yaw, walk_t = walk_t })
 end
 
 function on_input(self, action_id, action)
