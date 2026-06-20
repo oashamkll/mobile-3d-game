@@ -1,4 +1,6 @@
+[project]
 title = Wildland 3D Defold
+version = 0.1.0
 
 [bootstrap]
 main_collection = /main/main.collection
@@ -27,6 +29,3 @@ bindings = /main/game.input_binding
 default_texture_min_filter = linear_mipmap_nearest
 default_texture_mag_filter = linear
 max_debug_vertices = 10000
-
-[project]
-dependencies = 
