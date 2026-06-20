@@ -47,11 +47,11 @@ local function render_world()
 
     -- horizon/ground background
     gui.set_color(node(1), vmath.vector4(0.45, 0.53, 0.57, 1))
-    gui.set_position(node(1), vmath.vector3(W/2, H*0.73, -100))
+    gui.set_position(node(1), vmath.vector3(W/2, H*0.73, 0.00))
     gui.set_size(node(1), vmath.vector3(W, H*0.55, 0))
     gui.set_enabled(node(1), true)
     gui.set_color(node(2), vmath.vector4(0.22, 0.28, 0.20, 1))
-    gui.set_position(node(2), vmath.vector3(W/2, H*0.25, -99))
+    gui.set_position(node(2), vmath.vector3(W/2, H*0.25, 0.01))
     gui.set_size(node(2), vmath.vector3(W, H*0.55, 0))
     gui.set_enabled(node(2), true)
 
@@ -88,7 +88,7 @@ local function render_world()
         local n = node(start+i)
         if d then
             gui.set_enabled(n, true)
-            gui.set_position(n, vmath.vector3(d.x, d.y, 10 - i * 0.01))
+            gui.set_position(n, vmath.vector3(d.x, d.y, 0.10 + i * 0.001))
             gui.set_size(n, vmath.vector3(math.max(2, d.sx), math.max(2, d.sy), 0))
             gui.set_color(n, d.color)
         else
@@ -106,6 +106,9 @@ end
 
 function update(self, dt)
     gui.set_text(fps_node, "FPS " .. tostring(math.floor(1 / math.max(dt, 0.001))))
+    gui.set_position(base, vmath.vector3(120, 120, 0.85))
+    gui.set_position(knob, vmath.vector3(gui.get_position(knob).x, gui.get_position(knob).y, 0.90))
+    gui.set_position(fps_node, vmath.vector3(gui.get_position(fps_node).x, gui.get_position(fps_node).y, 0.95))
     render_world()
 end
 
